@@ -1,4 +1,4 @@
-# Windows 10 Hardening Guide
+# Windows 10/11 Hardening Guide
 Application of the ASD information security advice on hardening Microsoft Windows 10.
 
 Applies the advice published at https://www.cyber.gov.au/publications/hardening-microsoft-windows-10-build-1709
