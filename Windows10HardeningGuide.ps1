@@ -1,6 +1,8 @@
 # Windows 10 Hardening Guide - Setting Applicable Registry Keys via PowerShell based on https://www.cyber.gov.au/publications/hardening-microsoft-windows-10-build-1709
 # Application whitelisting and Attack Surface Reduction are recommended, although not set by this script. See https://www.cyber.gov.au/publications/implementing-application-whitelisting
 
+
+
 # Credential Caching
         Write-Host "`n"
         Write-Host "Credential caching" -ForegroundColor Yellow
@@ -37,7 +39,7 @@
 # Controlled Folder Access
         Write-Host "`n"
         Write-Host "Controlled Folder Access" -ForegroundColor Yellow
-    # Controlled Folder Access is a security feature in Microsoft Windows 10 version 1709 that forms part of Windows Defender Exploit Guard. 
+    # Controlled Folder Access is a security feature of Microsoft Windows 10, forms part of Microsoft Defender Exploit Guard. 
     # It is designed to combat the threat of ransomware. In order to use Controlled Folder Access, Windows Defender Antivirus must be configured 
     # as the primary real-time antivirus scanning engine on workstations. Other third party antivirus solutions may offer similar functionality as 
     # part of their offerings. https://docs.microsoft.com/en-au/windows/security/threat-protection/windows-defender-exploit-guard/controlled-folders-exploit-guard
