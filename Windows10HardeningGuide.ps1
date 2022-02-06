@@ -7,7 +7,7 @@
 	# recommendations in this publication, thorough testing should be undertaken to ensure the potential for unintended negative impacts on business processes is reduced as much as possible.
 	# While this publication refers to workstations, most recommendations are equally applicable to servers (with the exception of Domain Controllers) using Microsoft Windows 
 	# Server version 21H1 or Microsoft Windows Server 2019.
-	# Security features discussed in this publication, along with the names and locations of Group Policy settings, are taken from Microsoft Windows 10 version 21H1 â€“ some 
+	# Security features discussed in this publication, along with the names and locations of Group Policy settings, are taken from Microsoft Windows 10 version 21H1 – some 
 	# differences will exist for earlier versions of Microsoft Windows 10.
 	# For cloud-based device managers, such as Microsoft Endpoint Manager, equivalents can be found for many of the Group Policy settings. Alternatively, there is often a 
 	# function to import Group Policy settings into cloud-based device managers.
@@ -18,7 +18,7 @@
 		Write-Host "`n"
         Write-Host "Application Hardening" -ForegroundColor Yellow
 		Write-Host "Please review comments of this script for more information" -ForegroundColor Green
-	# When applications are installed they are often not pre-configured in a secure state. By default, many applications enable functionality that isnâ€™t required by any users 
+	# When applications are installed they are often not pre-configured in a secure state. By default, many applications enable functionality that isn’t required by any users 
 	# while in-built security functionality may be disabled or set at a lower security level. For example, Microsoft Office by default allows untrusted macros in Office 
 	# documents to automatically execute without user interaction. To reduce this risk, applications should have any in-built security functionality enabled and appropriately 
 	# configured along with unrequired functionality disabled. This is especially important for key applications such as office productivity suites (e.g. Microsoft Office), 
@@ -133,7 +133,7 @@
 			Write-Host "Allow storage of passwords and credentials for network authentication has been disabled" -ForegroundColor Green
 
     # Within an active user session, credentials are cached within the Local Security Authority Subsystem Service (LSASS) process 
-    # (including the userâ€™s passphrase in plaintext if WDigest authentication is enabled) to allow for access to network resources 
+    # (including the user’s passphrase in plaintext if WDigest authentication is enabled) to allow for access to network resources 
     # without users having to continually enter their credentials. Unfortunately, these credentials are at risk of theft by an adversary. 
     # To reduce this risk, WDigest authentication should be disabled.
         Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\Wdigest\" -Name uselogoncredential -Value 0 
@@ -256,7 +256,7 @@
         Write-Host "`n"
         Write-Host "Exploit Protection" -ForegroundColor Yellow
     # An adversary that develops exploits for Microsoft Windows or third party applications will have a higher success rate when security measures designed by 
-	# Microsoft to help prevent security vulnerabilities from being exploited are not implemented. Microsoft Defenderâ€™s exploit protection functionality, a 
+	# Microsoft to help prevent security vulnerabilities from being exploited are not implemented. Microsoft Defender’s exploit protection functionality, a 
 	# security feature of Microsoft Windows 10, provides system-wide and application-specific security measures. Exploit protection is designed to replace the 
 	# Enhanced Mitigation Experience Toolkit (EMET) that was used on earlier versions of Microsoft Windows 10.
 	# System-wide security measures configurable via exploit protection include: Control Flow Guard (CFG), Data Execution Prevention (DEP), mandatory 
@@ -295,10 +295,10 @@
 	# should be disabled. Instead, domain accounts with local administrative privileges, but without domain administrative privileges, should be used for workstation management.
 
 	# Accounts: Administrator account status
-		Disable-LocalUser -Name â€œAdministratorâ€
+		Disable-LocalUser -Name “Administrator”
 			Write-Host "In Built Administrator Account Disabled" -ForegroundColor Green
 
-	# If a common local administrator account absolutely must be used for workstation management then Microsoftâ€™s Local Administrator Password Solution (LAPS) 
+	# If a common local administrator account absolutely must be used for workstation management then Microsoft’s Local Administrator Password Solution (LAPS) 
 	# needs to be used to ensure unique passphrases are used for each workstation. In addition, User Account Control restrictions should be applied to remote 
 	# connections using such accounts. Note, the MS Security Guide Group Policy settings are available as part of the Microsoft Security Compliance Toolkit.
 
@@ -326,8 +326,8 @@
 		
 	# Microsoft Edge is a web browser that was first introduced in Microsoft Windows 10 to replace Internet Explorer 11. Microsoft Edge contains significant 
 	# security enhancements (the most recent version being based on the Chromium project) over Internet Explorer 11 and should be used wherever possible. 
-	# Furthermore, as Microsoft Edge contains an â€˜IE modeâ€™, Internet Explorer 11 should be disabled or removed from Microsoft Windows 10 to reduce the operating 
-	# systemâ€™s attack surface.
+	# Furthermore, as Microsoft Edge contains an ‘IE mode’, Internet Explorer 11 should be disabled or removed from Microsoft Windows 10 to reduce the operating 
+	# system’s attack surface.
 
 	# Allow Adobe Flash 
 		Set-ItemProperty -Path "Registry::HKLM\Software\Policies\Microsoft\MicrosoftEdge\Addons\" -Name FlashPlayerEnabled -Value 0
@@ -404,7 +404,7 @@
 
 	# As privileged credentials often allow users to bypass security functionality put in place to protect workstations, and are susceptible 
 	# to key logging applications, it is important that they are appropriately protected against compromise. In addition, an adversary that 
-	# brute forces captured password hashes can gain access to workstations if multi-factor authentication hasnâ€™t been implemented. To reduce 
+	# brute forces captured password hashes can gain access to workstations if multi-factor authentication hasn’t been implemented. To reduce 
 	# this risk, hardware-based multi-factor authentication should be used for privileged users, remote access and any access to important 
 	# or sensitive data repositories.
 	# Organisations may consider whether Windows Hello for Business (WHfB) is suitable for their environment. Notably, WHfB can be configured 
@@ -502,7 +502,7 @@
 		
 	# Providing users with a privileged account for day to day usage poses a risk that they will use this account for external web and email access. 
 	# This is of particular concern as privileged users have the ability to execute malicious code with privileged access rather than standard access. 
-	# To reduce this risk, users that donâ€™t require privileged access should not be granted privileged accounts while users that require privileged access 
+	# To reduce this risk, users that don’t require privileged access should not be granted privileged accounts while users that require privileged access 
 	# should have separate standard and privileged accounts with different credentials. In addition, any privileged accounts used should have 
 	# external web and email access blocked.
 	# For more information on the use of privileged accounts and minimising their usage see the Restricting Administrative Privileges publication.
@@ -531,7 +531,7 @@
         Write-Host "`n"
         Write-Host "Account lockout policy" -ForegroundColor Yellow	
 	
-	# Allowing unlimited attempts to access workstations will fail to prevent an adversaryâ€™s attempts to brute force authentication measures. 
+	# Allowing unlimited attempts to access workstations will fail to prevent an adversary’s attempts to brute force authentication measures. 
 	# To reduce this risk, accounts should be locked out after a defined number of invalid authentication attempts. The threshold for locking out 
 	# accounts does not need to be overly restrictive in order to be effective. For example, a threshold of 5 incorrect attempts, with a reset 
 	# period of 15 minutes for the lockout counter, will prevent any brute force attempt while being unlikely to lock out a legitimate user who 
@@ -727,7 +727,7 @@
 
 	# Include command line in process creation events is enabled
 		Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\Audit\'  -Name ProcessCreationIncludeCmdLine_Enabled -Value 1
-			Write-Host "Include command line in process creation events is enabled" -ForegroundColor Green}
+			Write-Host "Include command line in process creation events is enabled" -ForegroundColor Green
 
 	# Specify the maximum log file size (KB) for the Application Log is set
 		Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\EventLog\Application\'  -Name MaxSize -Value 65536
@@ -814,8 +814,8 @@
         Write-Host "`n"
         Write-Host "Autoplay and AutoRun" -ForegroundColor Yellow	
 
-# An adversary with access to a workstationâ€™s Basic Input/Output System (BIOS) or UEFI can modify the hardware 
-# configuration of the workstation to introduce attack vectors or weaken security functionality within the workstationâ€™s 
+# An adversary with access to a workstation’s Basic Input/Output System (BIOS) or UEFI can modify the hardware 
+# configuration of the workstation to introduce attack vectors or weaken security functionality within the workstation’s 
 # operating system. This can include disabling security functionality in the CPU, modifying allowed boot devices and 
 # enabling insecure communications interfaces such as FireWire and Thunderbolt. To reduce this risk, strong BIOS and 
 # UEFI passwords should be used for all workstations to prevent unauthorised access.
@@ -844,11 +844,11 @@ Write-Host "Please manually check to ensure that the hard disk of this device is
 		
 # When workstations have multiple network interfaces, such as an Ethernet interface and a wireless interface, 
 # it is possible to establish a bridge between the connected networks. For example, when using an Ethernet interface 
-# to connect to an organisationâ€™s wired network and a wireless interface to connect to another non-organisation 
+# to connect to an organisation’s wired network and a wireless interface to connect to another non-organisation 
 # controlled network such as a public wireless hotspot. When bridges are created between such networks an adversary 
 # can directly access the wired network from the wireless network to extract sensitive information. 
 # To reduce this risk, the ability to install and configure network bridges between different networks should be disabled. 
-# This wonâ€™t prevent an adversary from compromising a workstation via the wireless network and then using malicious 
+# This won’t prevent an adversary from compromising a workstation via the wireless network and then using malicious 
 # software as a medium to indirectly access the wired network. This can only be prevented by manually disabling 
 # all wireless interfaces when connecting to wired networks.		
 		
@@ -955,8 +955,8 @@ Write-Host "Prevent installation of devices using drivers that match these devic
 Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions\'  -Name DenyDeviceClassesRetroactive -Value 1
 Write-Host "Prevent installation of devices using drivers that match these device setup classes (retroactively) is enabled" -ForegroundColor Green
 
-Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses\" -Name 1 -Value '{d48179be-ec20-11d1-b6b8-00c04fa372a7}'
-Write-Host "{d48179be-ec20-11d1-b6b8-00c04fa372a7} is included on the banned device list to prevent DMA installations" -ForegroundColor Green
+Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses\" -Name 1 -Value 'd48179be-ec20-11d1-b6b8-00c04fa372a7'
+Write-Host "d48179be-ec20-11d1-b6b8-00c04fa372a7 is included on the banned device list to prevent DMA installations" -ForegroundColor Green
 
 #------------------------------------------------------------#
 # Drive encryption
@@ -994,19 +994,19 @@ Write-Host "All Removable Storage classes: Deny all access is enabled in local m
 Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\'  -Name Deny_All -Value 1
 Write-Host "All Removable Storage classes: Deny all access is enabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56308-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Execute -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56308-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Execute -Value 1
 Write-Host "CD and DVD: Deny execute access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56308-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56308-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "CD and DVD: Deny read access is disabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56308-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56308-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "CD and DVD: Deny write access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56308-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56308-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "CD and DVD: Deny read access is disabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56308-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56308-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "CD and DVD: Deny write access is enabled in user group policy" -ForegroundColor Green
 
 Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\Custom\Deny_Read\' -Name Deny_Read -Value 0
@@ -1021,65 +1021,65 @@ Write-Host "Custom Classes: Deny read access is disabled in user group policy" -
 Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\Custom\Deny_Write\'  -Name Deny_Write -Value 1
 Write-Host "Custom Classes: Deny write access is enabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56311-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Execute -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56311-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Execute -Value 1
 Write-Host "Floppy Drives: Deny execute access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56311-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56311-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "Floppy Drives: Deny read access is disabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56311-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56311-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "Floppy Drives: Deny write access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56311-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56311-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "Floppy Drives: Deny read access is disabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56311-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f56311-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "Floppy Drives: Deny write access is enabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Execute -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630d-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Execute -Value 1
 Write-Host "Removable Disks: Deny execute access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630d-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "Removable Disks: Deny read access is disabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630d-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "Removable Disks: Deny write access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630d-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "Removable Disks: Deny read access is disabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630d-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "Removable Disks: Deny write access is enabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630b-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Execute -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630b-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Execute -Value 1
 Write-Host "Tape Drives: Deny execute access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630b-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630b-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "Tape Drives: Deny read access is disabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630b-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630b-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "Tape Drives: Deny write access is enabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630b-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630b-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Read -Value 0
 Write-Host "Tape Drives: Deny read access is disabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630b-b6bf-11d0-94f2-00a0c91efb8b}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\53f5630b-b6bf-11d0-94f2-00a0c91efb8b\'  -Name Deny_Write -Value 1
 Write-Host "Tape Drives: Deny write access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{6AC27878-A6FA-4155-BA85-F98F491D4F33}\'  -Name Deny_Read -Value 0
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\6AC27878-A6FA-4155-BA85-F98F491D4F33\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE\'  -Name Deny_Read -Value 0
 Write-Host "WPD Devices: Deny read access is disabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{6AC27878-A6FA-4155-BA85-F98F491D4F33}\'  -Name Deny_Write -Value 1
-Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\6AC27878-A6FA-4155-BA85-F98F491D4F33\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\RemovableStorageDevices\F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE\'  -Name Deny_Write -Value 1
 Write-Host "WPD Devices: Deny write access is enabled in local machine group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{6AC27878-A6FA-4155-BA85-F98F491D4F33}\'  -Name Deny_Read -Value 0
-Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE}\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\6AC27878-A6FA-4155-BA85-F98F491D4F33\'  -Name Deny_Read -Value 0
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE\'  -Name Deny_Read -Value 0
 Write-Host "WPD Devices: Deny read access is disabled in user group policy" -ForegroundColor Green
 
-Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{6AC27878-A6FA-4155-BA85-F98F491D4F33}\'  -Name Deny_Write -Value 1
-Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\{F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE}\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\6AC27878-A6FA-4155-BA85-F98F491D4F33\'  -Name Deny_Write -Value 1
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\RemovableStorageDevices\F33FDC04-D1AC-4E8E-9A30-19BBD4B108AE\'  -Name Deny_Write -Value 1
 Write-Host "WPD Devices: Deny write access is enabled in user  group policy" -ForegroundColor Green
 
 #------------------------------------------------------------#
@@ -1093,7 +1093,7 @@ Write-Host "WPD Devices: Deny write access is enabled in user  group policy" -Fo
 # should file shares have read/write access. To reduce this risk, local file and print sharing 
 # should be disabled. Ideally, sensitive information should be centrally managed (e.g. on a network 
 # share with appropriate access controls). Disabling file and print sharing will not 
-# affect a userâ€™s ability to access shared drives and printers on a network.
+# affect a user’s ability to access shared drives and printers on a network.
 
 # Prevent the computer from joining a homegroup
 Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\HomeGroup\'  -Name DisableHomeGroup -Value 1
@@ -1115,13 +1115,13 @@ Write-Host "Prevent users from sharing files within their profile is enabled" -F
 # exploit this to disable any Local Group Policy settings that are hampering their efforts to 
 # extract sensitive information. To reduce this risk, all audit, user rights and security related 
 # Group Policy settings should be specified for workstations at an organisational unit or 
-# domain level. To ensure these policies arenâ€™t weakened, support for Local Group 
+# domain level. To ensure these policies aren’t weakened, support for Local Group 
 # Policy settings should also be disabled.
 
 # Configure registry policy processing
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Group Policy\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}\'  -Name NoGPOListChanges -Value 0
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Group Policy\35378EAC-683F-11D2-A89A-00C04FBBCFA2\'  -Name NoGPOListChanges -Value 0
 Write-Host "Configure registry policy processing is enabled" -ForegroundColor Green
-Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Group Policy\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}\'  -Name NoGPOListChanges -Value 0
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Group Policy\827D319E-6EAC-11D2-A4EA-00C04F79F83A\'  -Name NoGPOListChanges -Value 0
 Write-Host "Configure security policy processing is enabled" -ForegroundColor Green
 
 # Turn off background refresh of Group Policy
@@ -1160,8 +1160,166 @@ Write-Host "Windows Defender SmartScreen is set to Warn and Prevent Bypass" -For
 Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Installer\'  -Name EnableUserControl -Value 0
 Write-Host "Allow user control over installs is disabled" -ForegroundColor Green
 
+# Always install with elevated privileges is disabled in local machine policy
 Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Installer\'  -Name AlwaysInstallElevated -Value 0
 Write-Host "Always install with elevated privileges is disabled in local machine policy" -ForegroundColor Green
 
+# Always install with elevated privileges is disabled in user policy
 Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Installer\'  -Name AlwaysInstallElevated -Value 0
 Write-Host "Always install with elevated privileges is disabled in user policy" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Legacy and run once lists
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Legacy and run once lists" -ForegroundColor Yellow	
+
+# Once malicious code has been copied to a workstation, an adversary with registry access can 
+# remotely schedule it to execute (i.e. using the run once list) or to automatically execute each 
+# time Microsoft Windows starts (i.e. using the legacy run list). To reduce this risk, legacy 
+# and run once lists should be disabled. This may interfere with the operation of legitimate 
+# applications that need to automatically execute each time Microsoft Windows starts. In such 
+# cases, the Run these programs at user logon Group Policy setting can be used to perform the
+# same function in a more secure manner when defined at a domain level; however, if not used 
+# this Group Policy setting should be disabled rather than left in its default undefined state.
+
+# Do not process the legacy run list is enabled
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\'  -Name DisableCurrentUserRun -Value 1
+Write-Host "Do not process the legacy run list is enabled" -ForegroundColor Green
+
+# Do not process the run once list is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\'  -Name DisableLocalMachineRunOnce -Value 1
+Write-Host "Do not process the run once list is enabled" -ForegroundColor Green
+
+# Run These Programs At User Logon is disabled, no run keys are set
+# Set-ItemProperty -Path "Registry::HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run\"
+# Set-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\" 
+#    Write-Host "Run These Programs At User Logon is disabled, no run keys are set" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Microsoft accounts
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Microsoft accounts" -ForegroundColor Yellow
+
+# A feature of Microsoft Windows 10 is the ability to link Microsoft accounts (formerly Windows Live IDs) 
+# to local or domain accounts. When this occurs, a user’s settings and files are stored in the cloud using 
+# OneDrive rather than locally or on a domain controller. While this may have the benefit of allowing users 
+# to access their settings and files from any workstation (e.g. corporate workstation, home PC, internet cafe) 
+# it can also pose a risk to an organisation as they lose control over where sensitive information may be 
+# accessed from. To reduce this risk, users should not link Microsoft accounts with local or domain accounts.
+
+# Block all consumer Microsoft account user authentication
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\MicrosoftAccount\'  -Name DisableUserAuth -Value 1
+Write-Host "Block all consumer Microsoft account user authentication is enabled" -ForegroundColor Green
+
+# Prevent the usage of OneDrive for file storage
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive\'  -Name DisableFileSyncNGSC -Value 1
+Write-Host "Prevent the usage of OneDrive for file storage is enabled" -ForegroundColor Green
+
+# Accounts: Block Microsoft accounts
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'  -Name NoConnectedUse -Value 3
+Write-Host "Accounts: Block Microsoft accounts is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# MSS settings
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "MSS settings" -ForegroundColor Yellow
+
+# MSS settings are registry values previously identified by Microsoft security experts that can be used for 
+# increased security. While many of these registry values are no longer applicable in modern versions of 
+# Microsoft Windows, some still provide a security benefit. By failing to specify these MSS settings, an 
+# adversary may be able to exploit weaknesses in a workstation’s security posture to gain access to sensitive 
+# information. To reduce this risk, MSS settings that are still relevant to modern versions of Microsoft 
+# Windows should be specified using Group Policy settings.
+
+# The Group Policy Administrative Templates for MSS settings are available from the Microsoft Security 
+# Guidance blog. The ADMX and ADML files can be placed in %SystemDrive%\Windows\SYSVOL\domain\Policies\PolicyDefinitions 
+# on the Domain Controller and they will automatically be loaded in the Group Policy Management Editor.
+
+# (DisableIPSourceRouting IPv6) IP source routing protection level (protects against packet spoofing)
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip\Parameters\'  -Name DisableIPSourceRouting -Value 2
+Write-Host "MSS: (DisableIPSourceRouting) IP source routing protection level (protects against packet spoofing) is set to Highest protection, source routing is completely disabled " -ForegroundColor Green
+
+# (DisableIPSourceRouting IPv6) IP source routing protection level (protects against packet spoofing) is set to Highest protection, source routing is completely disabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip6\Parameters\'  -Name DisableIPSourceRouting -Value 2
+Write-Host "MSS: (DisableIPSourceRouting IPv6) IP source routing protection level (protects against packet spoofing) is set to Highest protection, source routing is completely disabled " -ForegroundColor Green
+
+# (EnableICMPRedirect) Allow ICMP redirects to override OSPF generated routes is disabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip\Parameters\'  -Name EnableICMPRedirect -Value 0
+Write-Host "MSS: (EnableICMPRedirect) Allow ICMP redirects to override OSPF generated routes is disabled" -ForegroundColor Green
+
+# (NoNameReleaseOnDemand) Allow the computer to ignore NetBIOS name release requests except from WINS servers is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Netbt\Parameters\'  -Name NoNameReleaseOnDemand -Value 1
+Write-Host "MSS: (NoNameReleaseOnDemand) Allow the computer to ignore NetBIOS name release requests except from WINS servers is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# NetBIOS over TCP/IP
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "NetBIOS over TCP/IP" -ForegroundColor Yellow
+
+# NetBIOS over TCP/IP facilitates a number of intrusion methods. To reduce this risk, NetBIOS over TCP/IP 
+# should be disabled. As NetBIOS over TCP/IP is only used to support legacy Microsoft Windows operating 
+# systems, such as those prior to Microsoft Windows 2000, there shouldn’t be a business requirement for 
+# its use except in very rare circumstances. NetBIOS over TCP/IP can be disabled by setting the NetBIOS 
+# settings under the IPv4 WINS settings on each network interface to Disable NetBIOS over TCP/IP. 
+# NetBIOS over TCP/IP is not supported by IPv6.
+
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces\tcpip*' -Name NetbiosOptions -Value 2
+Write-Host "NetBIOS over TCP/IP is disabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Network authentication
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Network authentication" -ForegroundColor Yellow
+
+# Using insecure network authentication methods may allow an adversary to gain unauthorised access to 
+# network traffic and services. To reduce this risk, only secure network authentication methods, 
+# ideally Kerberos, should be used for network authentication.
+
+# Configure encryption types allowed for Kerberos is set to AES128_HMAC_SHA1 and AES256_HMAC_SHA1
+Set-ItemProperty -Path  'Registry::HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters\'  -Name SupportedEncryptionTypes -Value 24
+Write-Host "Configure encryption types allowed for Kerberos is set to AES128_HMAC_SHA1 and AES256_HMAC_SHA1" -ForegroundColor Green
+
+# Network security: LAN Manager authentication level - Send NTLMv2 response only. Refuse LM & NTLM
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa\'  -Name LMCompatibilityLevel -Value 5
+Write-Host "LAN Manager authentication level is set to Send NTLMv2 response only & refuse LM & NTLM" -ForegroundColor Green
+
+# Minimum session security for NTLM SSP based (including secure RPC) clients is set to Require NTLMv2 session security & Require 128-bit encryption
+Set-ItemProperty -Path  'Registry::HKLM\System\CurrentControlSet\Control\Lsa\MSV1_0\'  -Name NTLMMinClientSec -Value 537395200
+Write-Host "Minimum session security for NTLM SSP based (including secure RPC) clients is set to Require NTLMv2 session security & Require 128-bit encryption" -ForegroundColor Green
+
+# Minimum session security for NTLM SSP based (including secure RPC) servers is set to Require NTLMv2 session security and Require 128-bit encryption
+Set-ItemProperty -Path  'Registry::HKLM\System\CurrentControlSet\Control\Lsa\MSV1_0\'  -Name NTLMMinServerSec -Value 537395200
+Write-Host "Minimum session security for NTLM SSP based (including secure RPC) servers is set to Require NTLMv2 session security and Require 128-bit encryption" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# NoLMHash policy
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "NoLMHash policy" -ForegroundColor Yellow
+
+# When Microsoft Windows hashes a password that is less than 15 characters, it stores both a LAN 
+# Manager hash (LM hash) and Windows NT hash (NT hash) in the local SAM database for local accounts, 
+# or in Activity Directory for domain accounts. The LM hash is significantly weaker than the NT hash 
+# and can easily be brute forced. To reduce this risk, the NoLMHash Policy should be implemented on 
+# all workstations and domain controllers. As the LM hash is designed for authentication of legacy 
+# Microsoft Windows operating systems, such as those prior to Microsoft Windows 2000, there shouldn’t 
+# be a business requirement for its use except in very rare circumstances.
+
+# Do not store LAN Manager hash value on next password change is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa\'  -Name noLMHash -Value 1
+Write-Host "Network security: Do not store LAN Manager hash value on next password change is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Operating system functionality
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Operating system functionality" -ForegroundColor Yellow
+
+# Leaving unneeded functionality in Microsoft Windows enabled can provide greater opportunities for 
+# potentially vulnerable or misconfigured functionality to be exploited by an adversary. To reduce 
+# this risk, unneeded functionality in Microsoft Windows should be disabled or removed.
