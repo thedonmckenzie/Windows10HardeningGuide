@@ -1,8 +1,8 @@
 # Windows 10 Hardening Guide - Setting Applicable Registry Keys via PowerShell based on https://www.cyber.gov.au/acsc/view-all-content/publications/hardening-microsoft-windows-10-version-21h1-workstations
 # This script looks to set as many of of the recommendations as possible, without using Group Policy (to allow for non Windows Pro licenced users).
 
-	# Workstations are often targeted by an adversary using malicious websites, emails or removable media in an attempt to extract sensitive information. Hardening workstations 
-	# is an important part of reducing this risk.
+	# Workstations are often targeted by an adversary using malicious websites, emails or removable media in an attempt to extract sensitive information. 
+	# Hardening workstations is an important part of reducing this risk.
 	# The ACSC provides recommendations on hardening workstations using Enterprise and Education editions of Microsoft Windows 10 version 21H1. Before implementing 
 	# recommendations in this publication, thorough testing should be undertaken to ensure the potential for unintended negative impacts on business processes is reduced as much as possible.
 	# While this publication refers to workstations, most recommendations are equally applicable to servers (with the exception of Domain Controllers) using Microsoft Windows 
