@@ -820,7 +820,7 @@
 # enabling insecure communications interfaces such as FireWire and Thunderbolt. To reduce this risk, strong BIOS and 
 # UEFI passwords should be used for all workstations to prevent unauthorised access.
 
-Write-Host "Unable to confirm that a BIOS password is set via PowerShell. Please manually check if a BIOS password is set (if applicable)" -ForegroundColor White
+		Write-Host "Unable to confirm that a BIOS password is set via PowerShell. Please manually check if a BIOS password is set (if applicable)" -ForegroundColor White
 
 #------------------------------------------------------------#
 # Boot devices
@@ -834,7 +834,7 @@ Write-Host "Unable to confirm that a BIOS password is set via PowerShell. Please
 # database to steal password hashes for offline brute force cracking attempts. To reduce this risk, workstations should be 
 # restricted to only booting from the designated primary system drive.		
 
-Write-Host "Please manually check to ensure that the hard disk of this device is the primary boot device and the machine is unable to be booted off removable media (if applicable)" -ForegroundColor White
+		Write-Host "Please manually check to ensure that the hard disk of this device is the primary boot device and the machine is unable to be booted off removable media (if applicable)" -ForegroundColor White
 
 #------------------------------------------------------------#
 # Bridging networks
@@ -1323,3 +1323,709 @@ Write-Host "Network security: Do not store LAN Manager hash value on next passwo
 # Leaving unneeded functionality in Microsoft Windows enabled can provide greater opportunities for 
 # potentially vulnerable or misconfigured functionality to be exploited by an adversary. To reduce 
 # this risk, unneeded functionality in Microsoft Windows should be disabled or removed.
+
+#$numberofservices = (Get-Service | Measure-Object).Count
+#$numberofdisabledservices = (Get-WmiObject Win32_Service | Where-Object $_.StartMode -eq 'Disabled').count
+#If ($numberofdisabledservices -eq $null)
+#elseif ($numberofdisabledservices -le '30')
+#elseif($numberofdisabledservices -gt '30')
+#Write-Host "There are $numberofservices services present on this machine and $numberofdisabledservices have been disabled. This incidicates that reduction in operating system functionality has likely been performed." -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Password and logon authentication policy
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Password and logon authentication policy" -ForegroundColor Yellow
+
+# The use of weak passwords, such as eight character passwords with no complexity, can allow them 
+# to be brute forced within minutes using applications freely available on the web. 
+# To reduce this risk, a secure password policy should be implemented.
+
+# Turn off picture password sign-in
+Set-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\System\ -Name BlockDomainPicturePassword -Value 1
+Write-Host "Turn off picture password sign-in is enabled" -ForegroundColor Green
+
+#Check: Turn on convenience PIN sign-in
+Set-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\System\ -Name AllowDomainPINLogon -Value 0
+Write-Host "Turn on convenience PIN sign-in is disabled" -ForegroundColor Green    
+
+# Store passwords using reversible encryption
+# Computer Configuration\Windows Settings\Security Settings\Account Policies\Password Policy\Store passwords using reversible encryption
+
+#Check: Limit local account use of blank passwords to console logon only
+Set-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa\ -Name LimitBlankPasswordUse -Value 1
+Write-Host "Limit local account use of blank passwords to console logon only is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Password and logon authentication policy
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Password and logon authentication policy" -ForegroundColor Yellow
+		
+# One method of reducing power usage by workstations is to enter a sleep, hibernation or hybrid sleep state 
+# after a pre-defined period of inactivity. When a workstation enters a sleep state it maintains the contents 
+# of memory while powering down the rest of the workstation; with hibernation or hybrid sleep, it writes the 
+# contents of memory to the hard drive in a hibernation file (hiberfil.sys) and powers down the rest of the 
+# workstation. When this occurs, sensitive information such as encryption keys could either be retained in 
+# memory or written to the hard drive in a hibernation file. An adversary with physical access to the workstation 
+# and either the memory or hard drive can recover the sensitive information using forensic techniques. 
+# To reduce this risk, sleep, hibernation and hybrid sleep states should be disabled.
+
+# Allow standby states (S1-S3) when sleeping (on battery) is disabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\abfc2519-3608-4c2a-94ea-171b0ed546ab\'  -Name DCSettingIndex -Value 0
+Write-Host "Allow standby states (S1-S3) when sleeping (on battery) is disabled" -ForegroundColor Green
+
+# Allow standby states (S1-S3) when sleeping (plugged in) is disabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\abfc2519-3608-4c2a-94ea-171b0ed546ab\'  -Name ACSettingIndex -Value 0
+Write-Host "Allow standby states (S1-S3) when sleeping (plugged in) is disabled" -ForegroundColor Green
+
+# Require a password when a computer wakes (on battery) is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51\'  -Name DCSettingIndex -Value 1
+Write-Host "Require a password when a computer wakes (on battery) is enabled" -ForegroundColor Green
+
+# Require a password when a computer wakes (plugged in) is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51\'  -Name ACSettingIndex -Value 1
+Write-Host "Require a password when a computer wakes (plugged in) is enabled" -ForegroundColor Green
+
+# Specify the system hibernate timeout (on battery) is enabled and set to 0 seconds
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\9D7815A6-7EE4-497E-8888-515A05F02364\'  -Name DCSettingIndex -Value 0
+Write-Host "Specify the system hibernate timeout (on battery) is enabled and set to 0 seconds" -ForegroundColor Green
+
+# Specify the system hibernate timeout (plugged in) is enabled and set to 0 seconds
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\9D7815A6-7EE4-497E-8888-515A05F02364\'  -Name ACSettingIndex -Value 0
+Write-Host "Specify the system hibernate timeout (plugged in) is enabled and set to 0 seconds" -ForegroundColor Green
+
+# Specify the system sleep timeout (on battery) is enabled and set to 0 seconds
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\29F6C1DB-86DA-48C5-9FDB-F2B67B1F44DA\'  -Name DCSettingIndex -Value 0
+Write-Host "Specify the system sleep timeout (on battery) is enabled and set to 0 seconds" -ForegroundColor Green
+
+# Specify the system sleep timeout (plugged in) is enabled and set to 0 seconds
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\29F6C1DB-86DA-48C5-9FDB-F2B67B1F44DA\'  -Name ACSettingIndex -Value 0
+Write-Host "Specify the system sleep timeout (plugged in) is enabled and set to 0 seconds" -ForegroundColor Green
+
+# Specify the unattended sleep timeout (on battery) is enabled and set to 0 seconds
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0\'  -Name DCSettingIndex -Value 0
+Write-Host "Specify the unattended sleep timeout (on battery) is enabled and set to 0 seconds" -ForegroundColor Green
+
+# Specify the unattended sleep timeout (plugged in) is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0\'  -Name ACSettingIndex -Value 0
+Write-Host "Specify the unattended sleep timeout (plugged in) is enabled" -ForegroundColor Green
+
+# Turn off hybrid sleep (on battery) is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\94ac6d29-73ce-41a6-809f-6363ba21b47e\'  -Name DCSettingIndex -Value 0
+Write-Host "Turn off hybrid sleep (on battery) is enabled" -ForegroundColor Green
+
+# Turn off hybrid sleep (plugged in) is enabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\94ac6d29-73ce-41a6-809f-6363ba21b47e\'  -Name ACSettingIndex -Value 0
+Write-Host "Turn off hybrid sleep (plugged in) is enabled" -ForegroundColor Green
+
+# Show hibernate in the power options menu is disabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer\'  -Name ShowHibernateOption -Value 0
+Write-Host "Show hibernate in the power options menu is disabled" -ForegroundColor Green
+
+# Show sleep in the power options menu is disabled
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer\'  -Name ShowSleepOption -Value 0
+Write-Host "Show sleep in the power options menu is disabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Powershell
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Password and logon authentication policy" -ForegroundColor Yellow
+		
+# Allowing any PowerShell script to execute exposes a workstation to the risk that a malicious 
+# script may be unwittingly executed by a user. To reduce this risk, users should not have the 
+# ability to execute PowerShell scripts; however, if using PowerShell scripts is an essential 
+# business requirement, only signed scripts should be allowed to execute. Ensuring that only 
+# signed scripts are allowed to execute can provide a level of assurance that a script is 
+# trusted and has been endorsed as having a legitimate business purpose.
+
+# For more information on how to effectively implement PowerShell see the Securing PowerShell in the Enterprise publication.
+# https://www.cyber.gov.au/node/1293
+
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\' -Name EnableScriptBlockLogging -Value 1
+Write-Host "Turn on PowerShell Script Block Logging is enabled in Local Machine GP" -ForegroundColor Green
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\' -Name EnableScriptBlockLogging -Value 1
+Write-Host "Turn on PowerShell Script Block Logging is enabled in User GP" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\' -Name EnableScriptBlockInvocationLogging -Value 1
+Write-Host "Turn on PowerShell Script Block Invocation Logging is enabled in Local Machine GP" -ForegroundColor Green
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\' -Name EnableScriptBlockInvocationLogging -Value 1
+Write-Host "Turn on PowerShell Script Block Invocation Logging is enabled in User GP" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\PowerShell\' -Name EnableScripts -Value 1
+Write-Host "Turn on Script Execution is enabled in Local Machine GP" -ForegroundColor Green
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\PowerShell\' -Name EnableScripts -Value 1
+Write-Host "Turn on Script Execution is enabled in User GP" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\PowerShell\' -Name ExecutionPolicy -Value 0
+Write-Host "Allow only signed powershell scripts is enabled in Local Machine GP" -ForegroundColor Green
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\PowerShell\' -Name ExecutionPolicy -Value 0
+Write-Host "Allow only signed powershell scripts is enabled in User GP" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Registry Editing Tools
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Registry Editing Tools" -ForegroundColor Yellow
+		
+# One method for malicious code to maintain persistence (i.e. remain after a workstation is rebooted)
+# is to use administrative privileges to modify the registry (as standard privileges only allow 
+# viewing of the registry). To reduce this risk, users should not have the ability to modify the 
+# registry using registry editing tools (i.e. regedit) or to make silent changes to the registry (i.e. using .reg files).
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\'  -Name DisableRegistryTools -Value 2
+Write-Host "Prevent access to registry editing tools is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Remote Assistance
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Remote Assistance" -ForegroundColor Yellow
+
+# While Remote Assistance can be a useful business tool to allow system administrators to remotely 
+# administer workstations, it can also pose a risk. When a user has a problem with their workstation 
+# they can generate a Remote Assistance invitation. This invitation authorises anyone that has 
+# access to it to remotely control the workstation that issued the invitation. Invitations can be 
+# sent by email, instant messaging or saved to a file. If an adversary manages to intercept an 
+# invitation they will be able to use it to access the user’s workstation. Additionally, if 
+# network traffic on port 3389 is not blocked from reaching the internet, users may send Remote 
+# Assistance invitations over the internet which could allow for remote access to their 
+# workstation by an adversary. While Remote Assistance only grants access to the privileges 
+# of the user that generated the request, an adversary could install a key logging application 
+# on the workstation in preparation of a system administer using their privileged credentials 
+# to fix any problems. To reduce this risk, Remote Assistance should be disabled.
+
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\policies\Microsoft\Windows NT\Terminal Services\'  -Name fAllowUnsolicited -Value 0
+Write-Host "Configure Offer Remote Assistance is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\policies\Microsoft\Windows NT\Terminal Services\'  -Name fAllowToGetHelp -Value 0
+Write-Host "Configure Solicited Remote Assistance is disabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Remote Desktop Services
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Remote Desktop Services" -ForegroundColor Yellow
+
+# While remote desktop access may be convenient for legitimate users to access workstations 
+# across a network, it also allows an adversary to access other workstations once they have 
+# compromised an initial workstation and user’s credentials. This risk can be compounded if 
+# an adversary can compromise domain administrator credentials or common local administrator 
+# credentials. To reduce this risk, Remote Desktop Services should be disabled.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fDenyTSConnections -Value 0
+Write-Host "Allow users to connect remotely by using Remote Desktop Services is disabled" -ForegroundColor Green
+
+# Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\User Rights Assignment
+# Write-Host "No members are allowed to logon through remote desktop services, this setting is compliant" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CredentialsDelegation\'  -Name AllowProtectedCreds -Value 1
+Write-Host "Remote host allows delegation of non-exportable credentials is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name AuthenticationLevel -Value 1
+Write-Host "Configure server authentication for client is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name DisablePasswordSaving -Value 1
+Write-Host "Do not allow passwords to be saved is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fDisableForcibleLogoff -Value 1
+Write-Host "Deny logoff of an administrator logged in to the console session is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fDisableClip -Value 1
+Write-Host "Do not allow Clipboard redirection is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fDisableCdm -Value 1
+Write-Host "Do not allow drive redirection is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fPromptForPassword -Value 1
+Write-Host "Always prompt for password upon connection is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fWritableTSCCPermTab -Value 0
+Write-Host "Do not allow local administrators to customize permissions is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name fEncryptRPCTraffic -Value 1
+Write-Host "Require secure RPC communication is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name SecurityLayer -Value 2
+Write-Host "Require use of specific security layer for remote (RDP) connections is set to SSL" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name UserAuthentication -Value 1
+Write-Host "Require user authentication for remote connections by using Network Level Authentication is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\'  -Name MinEncryptionLevel -Value 3
+Write-Host "Set client connection encryption level is set to high" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Remote Procedure Call
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Remote Procedure Call" -ForegroundColor Yellow
+
+# Remote Procedure Call (RPC) is a technique used for facilitating client and server application 
+# communications using a common interface. RPC is designed to make client and server interaction 
+# easier and safer by using a common library to handle tasks such as security, synchronisation 
+# and data flows. If unauthenticated communications are allowed between client and server 
+# applications, it could result in accidental disclosure of sensitive information or the 
+# failure to take advantage of RPC security functionality. To reduce this risk, all RPC 
+# clients should authenticate to RPC servers.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows NT\Rpc\'  -Name RestrictRemoteClients -Value 1
+Write-Host "Restrict Unauthenticated RPC clients is enabled" -ForegroundColor Green
+
+
+#------------------------------------------------------------#
+# Reporting system information
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Reporting system information" -ForegroundColor Yellow
+
+# Microsoft Windows contains a number of in-built functions to, often automatically and transparently, 
+# report system information to Microsoft. This includes system errors and crash information as well as 
+# inventories of applications, files, devices and drivers on the system. If captured by an adversary, 
+# this information could expose potentially sensitive information on workstations. This information 
+# could also subsequently be used by an adversary to tailor malicious code to target specific 
+# workstations or users. To reduce this risk, all in-built functions that report potentially 
+# sensitive system information should be directed to a corporate Windows Error Reporting server.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy\'  -Name DisableQueryRemoteServer -Value 0
+Write-Host "Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\AppCompat\'  -Name DisableInventory -Value 1
+Write-Host "Turn off Inventory Collector is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\AppCompat\'  -Name DisableUAR -Value 1
+Write-Host "Turn off Steps Recorder is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Windows\DataCollection\' -Name AllowTelemetry -Value 0
+Write-Host "Allow Telemetry is enabled in Local Machine GP" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Windows\DataCollection\' -Name AllowTelemetry -Value 0
+Write-Host "Allow Telemetry is enabled in User GP" -ForegroundColor Green
+
+# Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\'  -Name CorporateWerServer -Value 0
+# Write-Host "The corporate WER server is configured" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\'  -Name CorporateWerUseSSL -Value 1
+Write-Host "Connect using SSL is enabled" -ForegroundColor Green
+
+
+#------------------------------------------------------------#
+# Safe Mode
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Safe Mode" -ForegroundColor Yellow
+
+# An adversary with standard user credentials that can boot into Microsoft Windows using 
+# Safe Mode, Safe Mode with Networking or Safe Mode with Command Prompt options may be able 
+# to bypass system protections and security functionality. To reduce this risk, users with 
+# standard credentials should be prevented from using Safe Mode options to log in.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\'  -Name SafeModeBlockNonAdmins -Value 1
+Write-Host "Block Non-Administrators in Safe Mode is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Secure channel communications
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Secure channel communications" -ForegroundColor Yellow
+
+# Periodically, workstations connected to a domain will communicate with the domain controllers. 
+# If an adversary has access to unprotected network communications they may be able to capture 
+# or modify sensitive information communicated between workstations and the domain controllers. 
+# To reduce this risk, all secure channel communications should be signed and encrypted with strong session keys.
+
+Set-ItemProperty -Path "Registry::HKLM\System\CurrentControlSet\Services\Netlogon\Parameters\" -Name RequireSignOrSeal -Value 1
+Write-Host "Domain member: Digitally encrypt or sign secure channel data (always) is enabled" -ForegroundColor Green
+   
+Set-ItemProperty -Path "Registry::HKLM\System\CurrentControlSet\Services\Netlogon\Parameters\" -Name SealSecureChannel -Value 1
+Write-Host "Domain member: Digitally encrypt secure channel data (when possible) is enabled" -ForegroundColor Green
+   
+Set-ItemProperty -Path "Registry::HKLM\System\CurrentControlSet\Services\Netlogon\Parameters\" -Name SignSecureChannel -Value 1
+Write-Host "Domain member: Digitally sign secure channel data (when possible) is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path "Registry::HKLM\System\CurrentControlSet\Services\Netlogon\Parameters\" -Name RequireStrongKey -Value 1
+Write-Host "Domain member: Require strong (Windows 2000 or later) session key is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Security policies
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Security policies" -ForegroundColor Yellow
+
+# By failing to comprehensively specify security policies, an adversary may be able to exploit 
+# weaknesses in a workstation’s Group Policy settings to gain access to sensitive information. 
+# To reduce this risk, security policies should be comprehensively specified.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\wcmsvc\wifinetworkmanager\config\'  -Name AutoConnectAllowedOEM -Value 0
+Write-Host "Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent\'  -Name DisableWindowsConsumerFeatures -Value 1
+Write-Host "Turn off Microsoft consumer experiences is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer\'  -Name NoHeapTerminationOnCorruption -Value 0
+Write-Host "Turn off heap termination on corruption is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\'  -Name PreXPSP2ShellProtocolBehavior -Value 0
+Write-Host "Turn off shell protocol protected mode is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKLM\Software\Policies\Microsoft\Internet Explorer\Feeds\' -Name DisableEnclosureDownload -Value 1
+Write-Host "Prevent downloading of enclosures is enabled in Local Machine GP" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKCU\Software\Policies\Microsoft\Internet Explorer\Feeds\' -Name DisableEnclosureDownload -Value 1
+Write-Host "Prevent downloading of enclosures is enabled in User GP" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search\'  -Name AllowIndexingEncryptedStoresOrItems -Value 0
+Write-Host "Allow indexing of encrypted files is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\GameDVR\'  -Name AllowGameDVR -Value 0
+Write-Host "Enables or disables Windows Game Recording and Broadcasting is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Netlogon\Parameters\ -Name DisablePasswordChange -Value 0
+Write-Host "Domain member: Disable machine account password changes is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Netlogon\Parameters\'  -Name MaximumPasswordAge -Value 30
+Write-Host "Domain member: Maximum machine account password age is set to a compliant setting" -ForegroundColor Green
+
+Set-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa\pku2u\ -Name AllowOnlineID -Value 0
+Write-Host "Network security: Allow PKU2U authentication requests to this computer to use online identities is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LDAP\' -Name LDAPClientIntegrity -Value 1
+Write-Host "Network security: LDAP client signing requirements is enabled and set to Negotiate Signing" -ForegroundColor Green
+
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Kernel\' -Name ObCaseInsensitive -Value 1
+Write-Host "System objects: Require case insensitivity for non-Windows subsystems is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\' -Name ProtectionMode -Value 1
+Write-Host "System objects: Strengthen default permissions of internal system objects (e.g. Symbolic Links) is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Server Message Block sessions
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Server Message Block sessions" -ForegroundColor Yellow
+
+# An adversary that has access to network communications may attempt to use session hijacking tools to interrupt, 
+# terminate or steal a Server Message Block (SMB) session. This could potentially allow an adversary to modify 
+# packets and forward them to a SMB server to perform undesirable actions or to pose as the server or client 
+# after a legitimate authentication has taken place to gain access to sensitive information. To reduce this 
+# risk, all communications between SMB clients and servers should be signed, with any passwords used appropriately encrypted.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MrxSmb10\'  -Name Start -Value 4
+Write-Host "Configure SMB v1 client driver is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters\'  -Name SMB1 -Value 0
+Write-Host "Configure SMB v1 server is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\'  -Name RequireSecuritySignature -Value 1
+Write-Host "Microsoft Network Client: Digitally sign communications (always) is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\'  -Name EnableSecuritySignature -Value 1
+Write-Host "Microsoft network client: Digitally sign communications (if server agrees) is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\'  -Name EnablePlainTextPassword -Value 0
+Write-Host "Microsoft network client: Send unencrypted password to third-party SMB servers is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\'  -Name AutoDisconnect -Value 15
+Write-Host "Microsoft network server: Amount of idle time required before suspending session is less than or equal to 15 mins" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\'  -Name RequireSecuritySignature -Value 1
+Write-Host "Microsoft network server: Digitally sign communications (always) is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\'  -Name EnableSecuritySignature -Value 1
+Write-Host "Microsoft network server: Digitally sign communications (if client agrees) is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Session locking
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Session locking" -ForegroundColor Yellow
+
+# An adversary with physical access to an unattended workstation with an unlocked session may attempt 
+# to inappropriately access sensitive information or conduct actions that won’t be attributed to them. 
+# To reduce this risk, a session lock should be configured to activate after a maximum of 15 minutes 
+# of user inactivity. Furthermore, be aware that information or alerts may be displayed on the lock 
+# screen. To reduce the risk of unauthorised information disclosure, minimise the amount of information 
+# that the lock screen is permitted to display.
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Personalization\'  -Name NoLockScreenCamera -Value 1
+Write-Host "Prevent enabling lock screen camera is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Personalization\'  -Name NoLockScreenSlideshow -Value 1
+Write-Host "Prevent enabling lock screen slide show is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\System\'  -Name AllowDomainDelayLock -Value 0
+Write-Host "Allow users to select when a password is required when resuming from connected standby is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\System\'  -Name DisableLockScreenAppNotifications -Value 1
+Write-Host "Turn off app notifications on the lock screen is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer\'  -Name ShowLockOption -Value 1
+Write-Host "Show lock in the user tile menu is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsInkWorkspace\'  -Name AllowWindowsInkWorkspace -Value 1
+Write-Host "Allow Windows Ink Workspace is on but dissalow access above lock" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\'  -Name inactivitytimeoutsecs -Value '900'
+Write-Host "The machine inactivity limit has been set to $bKErRNAU3b4k6hI seconds which is a compliant setting" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop\'  -Name ScreenSaveActive -Value 1
+Write-Host "Enable screen saver is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop\'  -Name ScreenSaverIsSecure -Value 1
+Write-Host "Password protect the screen saver is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop\'  -Name ScreenSaveTimeOut -Value '900'
+Write-Host "Screen saver timeout is set compliant" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications\'  -Name NoToastApplicationNotificationOnLockScreen -Value 1
+Write-Host "Turn off toast notifications on the lock screen is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent\'  -Name DisableThirdPartySuggestions -Value 1
+Write-Host "Do not suggest third-party content in Windows spotlight is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Software-based firewalls
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Software-based firewalls" -ForegroundColor Yellow
+		
+# Network firewalls often fail to prevent the propagation of malicious code on a network, or an 
+# adversary from extracting sensitive information, as they generally only control which ports or 
+# protocols can be used between segments on a network. Many forms of malicious code are designed 
+# specifically to take advantage of this by using common protocols such as HTTP, HTTPS, SMTP and DNS. 
+# To reduce this risk, software-based firewalls that filter both incoming and outgoing traffic 
+# should be appropriately implemented. Software-based firewalls are more effective than network 
+# firewalls as they can control which applications and services can communicate to and from workstations. 
+# The in-built Windows firewall can be used to control both inbound and outbound traffic for specific applications.		
+
+#------------------------------------------------------------#
+# Sound Recorder
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Sound Recorder" -ForegroundColor Yellow
+		
+# Sound Recorder is a feature of Microsoft Windows that allows audio from a device with a microphone 
+# to be recorded and saved as an audio file on the local hard drive. An adversary with remote access 
+# to a workstation can use this functionality to record sensitive conversations in the vicinity of the workstation. 
+# To reduce this risk, Sound Recorder should be disabled.
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\SoundRecorder\'  -Name Soundrec -Value 1
+Write-Host "Do not allow Sound Recorder to run is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Standard Operating Environment
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Standard Operating Environment" -ForegroundColor Yellow
+		
+# When users are left to setup, configure and maintain their own workstations it can very easily lead 
+# to an inconsistent and insecure environment where particular workstations are more vulnerable than others. 
+# This inconsistent and insecure environment can easily allow an adversary to gain an initial foothold 
+# on a network. To reduce this risk, workstations should connect to a domain using a Standard Operating 
+# Environment that is centrally controlled and configured by experienced information technology and 
+# information security professionals. However, in some cases, cloud-based domain services may be more 
+# effective in deploying workstation configurations to a mobile and disparate workforce. In particular, 
+# security objectives may be achieved without the need to create ‘gold’ images and can offer more 
+# flexible enrolment processes. However, enrolment methods, such as Microsoft Intune self-enrolment, 
+# may introduce their own security risks, such as leaving behind local administrator accounts.
+
+#------------------------------------------------------------#
+# System backup and restore
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "System backup and restore" -ForegroundColor Yellow
+
+# An adversary that compromises a user account with privileges to backup files and directories can 
+# use this privilege to backup the contents of a workstation. This content can then be transferred to 
+# a non-domain connected workstation where the adversary has administrative access. From here an 
+# adversary can restore the contents and take ownership, thereby circumventing all original access 
+# controls that were in place. In addition, if a user has privileges to restore files and directories, 
+# an adversary could exploit this privilege by using it to either restore previous versions of files 
+# that may have been removed by system administrators as part of malicious code removal activities or 
+# to replace existing files with malicious variants. To reduce this risk, the ability to use backup 
+# and restore functionality should be limited to administrators.
+
+# Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\User Rights Assignment\Backup Files and Directories. Only Administrators should be members of this setting" -ForegroundColor White
+# Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\User Rights Assignment\Restore Files and Directories. Only Administrators should be members of this setting" -ForegroundColor White
+
+#------------------------------------------------------------#
+# System cryptography
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "System cryptography" -ForegroundColor Yellow
+		
+# By default, when cryptographic keys are stored in Microsoft Windows, users can access them without 
+# first entering a password to unlock the certificate store. An adversary that compromises a workstation, 
+# or gains physical access to an unlocked workstation, can use these user keys to access sensitive 
+# information or resources that are cryptographically protected. To reduce this risk, strong encryption 
+# algorithms and strong key protection should be used on workstations.
+
+Set-ItemProperty -Path "Registry::HKLM\SOFTWARE\Policies\Microsoft\Cryptography" -Name ForceKeyProtection -Value 2 
+Write-Host "System cryptography: Force strong key protection for user keys stored on the computer is set to user must enter a password each time they use a key" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Centrify\CentrifyDC\Settings\Fips\'  -Name fips.mode.enable -Value 'true'
+Write-Host "Use FIPS compliant algorithms for encryption, hashing and signing is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# System cryptography
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "System cryptography" -ForegroundColor Yellow
+
+# By default, when cryptographic keys are stored in Microsoft Windows, users can access them without first 
+# entering a password to unlock the certificate store. An adversary that compromises a workstation, 
+# or gains physical access to an unlocked workstation, can use these user keys to access sensitive 
+# information or resources that are cryptographically protected. To reduce this risk, strong 
+# encryption algorithms and strong key protection should be used on workstations.
+
+# Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options
+
+#------------------------------------------------------------#
+# User rights policies
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "User rights policies" -ForegroundColor Yellow
+
+# 'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\User Rights Assignment'" -ForegroundColor White
+
+# By failing to comprehensively specify user rights policies, an adversary may be able to exploit weaknesses in a workstation’s Group Policy settings to gain access to sensitive information. To reduce this risk, user rights policies should be comprehensively specified.
+
+#------------------------------------------------------------#
+# Virtualised web and email access
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Virtualised web and email access" -ForegroundColor Yellow
+
+# An adversary can often deliver malicious code directly to workstations via external 
+# web and email access. Once a workstation has been exploited, an adversary can 
+# use these same communication paths for bi-directional communications to control 
+# their malicious code. To reduce this risk, web and email access on workstations 
+# should occur through a non-persistent virtual environment (i.e. using virtual 
+# desktops or virtual applications). When using a virtual environment, workstations 
+# will receive additional protection against intrusion attempts targeted at exploiting 
+# security vulnerabilities in web browsers and email clients as any attempts, if successful, 
+# will execute in a non-persistent virtual environment rather than on a local workstation.
+
+#------------------------------------------------------------#
+# Web Proxy Auto Discovery protocol
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Web Proxy Auto Discovery protocol" -ForegroundColor Yellow
+		
+# The Web Proxy Auto Discovery (WPAD) protocol assists with the automatic detection of proxy settings for web browsers. 
+# Unfortunately, WPAD has suffered from a number of severe security vulnerabilities. Organisations that do 
+# not rely on the use of the WPAD protocol should disable it. This can be achieved by modifying each 
+# workstation’s host file at %SystemDrive%\Windows\System32\Drivers\etc\hosts to create the 
+# following entry: 255.255.255.255 wpad.		
+		
+#------------------------------------------------------------#
+# Windows Remote Management
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Windows Remote Management" -ForegroundColor Yellow
+			
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Client\'  -Name AllowBasic -Value 0
+Write-Host "Allow Basic authentication is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Client\'  -Name AllowUnencryptedTraffic -Value 0
+Write-Host "Allow unencrypted traffic is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Client\'  -Name AllowDigest -Value 0
+Write-Host "Disallow Digest authentication is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Service\'  -Name AllowBasic -Value 0
+Write-Host "Allow Basic authentication is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Service\'  -Name AllowUnencryptedTraffic -Value 0
+Write-Host "Allow unencrypted traffic is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Service\'  -Name DisableRunAs -Value 1
+Write-Host "Disallow WinRM from storing RunAs credentials is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Windows Remote Shell access
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Windows Remote Shell access" -ForegroundColor Yellow
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\WinRM\Service\WinRS\'  -Name AllowRemoteShellAccess -Value 0
+Write-Host "Allow Remote Shell Access is disabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Windows Search and Cortana
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Windows Search and Cortana" -ForegroundColor Yellow
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search\'  -Name AllowCortana -Value 0
+Write-Host "Allow Cortana is disabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search\'  -Name ConnectedSearchUseWeb -Value 0
+Write-Host "Don't search the web or display web results in Search is enabled" -ForegroundColor Green
+
+# Low priorities
+# The following recommendations, listed in alphabetical order, should be treated as low priorities when hardening Microsoft Windows 10 workstations.
+
+#------------------------------------------------------------#
+# Displaying file extensions
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Displaying file extensions" -ForegroundColor Yellow
+
+# When extensions for known file types are hidden, an adversary can more easily use social engineering techniques to convince users to execute malicious email attachments. For example, a file named vulnerability_assessment.pdf.exe could appear as vulnerability_assessment.pdf to a user. To reduce this risk, hiding extensions for known file types should be disabled. Showing extensions for all known file types, in combination with user education and awareness of dangerous email attachment file types, can help reduce the risk of users executing malicious email attachments.
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'  -Name HideFileExt -Value 0
+Write-Host "Display file extensions is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# File and folder security properties
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "File and folder security properties" -ForegroundColor Yellow
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\'  -Name NoSecurityTab -Value 1
+Write-Host "Remove Security tab is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Location awareness
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Location awareness" -ForegroundColor Yellow
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\LocationAndSensors\'  -Name DisableLocation -Value 1
+Write-Host "Turn off location is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\LocationAndSensors\'  -Name DisableLocationScripting -Value 1
+Write-Host "Turn off location scripting is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\LocationAndSensors\'  -Name DisableWindowsLocationProvider -Value 1
+Write-Host "Turn off Windows Location Provider is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Microsoft Store
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Microsoft Store" -ForegroundColor Yellow
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer\'  -Name NoUseStoreOpenWith -Value 1
+Write-Host "Turn off access to the Store is enabled" -ForegroundColor Green
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\WindowsStore\'  -Name RemoveWindowsStore -Value 1
+Write-Host "Turn off the Store application is enabled" -ForegroundColor Green
+
+#------------------------------------------------------------#
+# Resultant Set of Policy reporting
+#------------------------------------------------------------#
+        Write-Host "`n"
+        Write-Host "Resultant Set of Policy reporting" -ForegroundColor Yellow
+
+Set-ItemProperty -Path  'Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\System\'  -Name DenyRsopToInteractiveUser -Value 1
+Write-Host "Determine if interactive users can generate Resultant Set of Policy data is enabled" -ForegroundColor Green
+
+# Further information
+# The Information Security Manual is a cyber security framework that organisations 
+# can apply to protect their systems and data from cyber threats. The advice in the 
+# Strategies to Mitigate Cyber Security Incidents, along with its Essential Eight, 
+# complements this framework.
